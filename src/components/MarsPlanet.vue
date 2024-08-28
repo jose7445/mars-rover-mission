@@ -33,13 +33,13 @@
           alt="Obstacle"
         />
 
-        <!-- Ship -->
+        <!-- Nave -->
         <img
-          v-if="isShipPosition(square)"
+          v-if="isNavePosition(square)"
           src="../assets/images/nave.png"
           class="w-12 h-12 absolute inset-0 m-auto"
-          :style="{ transform: `rotate(${shipDirection * 90}deg)` }"
-          alt="Ship"
+          :style="{ transform: `rotate(${naveDirection * 90}deg)` }"
+          alt="Nave"
         />
       </div>
     </div>
@@ -68,8 +68,8 @@ export default {
     return {
       size: 300, // Tamaño del tablero en píxeles
       gridSize: 6, // Número de filas/columnas
-      shipPosition: { x: 0, y: 0 }, // Posición inicial de la nave
-      shipDirection: 0, // Dirección inicial de la nave (0: arriba, 1: derecha, 2: abajo, 3: izquierda)
+      navePosition: { x: 0, y: 0 }, // Posición inicial de la nave
+      naveDirection: 0, // Dirección inicial de la nave (0: arriba, 1: derecha, 2: abajo, 3: izquierda)
       squares: [], // Array de coordenadas de cada cuadrado
       command: "", // Comando ingresado por el usuario
       obstacles: [], // Array de coordenadas de los obstáculos
@@ -96,7 +96,7 @@ export default {
         const randomSquare =
           this.squares[Math.floor(Math.random() * this.squares.length)];
         if (
-          !this.isSamePosition(randomSquare, this.shipPosition) &&
+          !this.isSamePosition(randomSquare, this.navePosition) &&
           !this.isObstacle(randomSquare)
         ) {
           this.obstacles.push(randomSquare);
@@ -110,20 +110,20 @@ export default {
       );
     },
 
-    isShipPosition(position) {
-      return this.isSamePosition(this.shipPosition, position);
+    isNavePosition(position) {
+      return this.isSamePosition(this.navePosition, position);
     },
 
     isSamePosition(pos1, pos2) {
       return pos1.x === pos2.x && pos1.y === pos2.y;
     },
 
-    moveShip(direction) {
-      let newPosition = { ...this.shipPosition };
+    moveNave(direction) {
+      let newPosition = { ...this.navePosition };
 
       switch (direction) {
         case "F":
-          switch (this.shipDirection) {
+          switch (this.naveDirection) {
             case 0: // Arriba
               newPosition.y -= 1;
               break;
@@ -140,16 +140,16 @@ export default {
           break;
 
         case "R":
-          this.shipDirection = (this.shipDirection + 1) % 4;
+          this.naveDirection = (this.naveDirection + 1) % 4;
           break;
 
         case "L":
-          this.shipDirection = (this.shipDirection + 3) % 4;
+          this.naveDirection = (this.naveDirection + 3) % 4;
           break;
       }
 
       if (this.isWithinBounds(newPosition) && !this.isObstacle(newPosition)) {
-        this.shipPosition = newPosition;
+        this.navePosition = newPosition;
       } else if (direction === "F") {
         alert(
           this.isObstacle(newPosition)
@@ -172,7 +172,7 @@ export default {
       const commands = this.command.trim().toUpperCase().split("");
       for (const cmd of commands) {
         if (["F", "R", "L"].includes(cmd)) {
-          this.moveShip(cmd);
+          this.moveNave(cmd);
         } else {
           alert('Invalid command. Use: "F", "R" o "L".');
           break;
@@ -185,7 +185,7 @@ export default {
       this.$emit("back-to-panel");
     },
 
-    initializeShipPosition() {
+    initializeNavePosition() {
       const directionMapping = {
         N: 0, // Norte = Arriba
         E: 1, // Este = Derecha
@@ -204,8 +204,8 @@ export default {
         this.isWithinBounds(initialPosition) &&
         !this.isObstacle(initialPosition)
       ) {
-        this.shipPosition = initialPosition;
-        this.shipDirection = initialDirection;
+        this.navePosition = initialPosition;
+        this.naveDirection = initialDirection;
         this.generateObstacles(); // Genera los obstáculos después de colocar la nave
       } else {
         alert("The initial position of the boat is not valid.");
@@ -215,7 +215,7 @@ export default {
 
   mounted() {
     this.updateGrid();
-    this.initializeShipPosition(); // Inicializa la posición y dirección del barco
+    this.initializeNavePosition(); // Inicializa la posición y dirección del barco
   },
 };
 </script>
