@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center flex-col gap-8">
-    <!--Tableqwe-->
+    <!--Table-->
     <button
       class="font-bold border-[#7FFF7F] w-full basis-1/3 text-[#7FFF7F] hover:text-white"
       @click="backToPanel"
